@@ -1,6 +1,7 @@
 package com.example.githubquery;
 
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -8,6 +9,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import com.example.githubquery.utilities.NetworkUtils;
 
+import java.io.IOException;
 import java.net.URL;
 
 public class MainActivity extends Activity {
@@ -27,8 +29,31 @@ public class MainActivity extends Activity {
   }
 
   private void makeGitHubSearchQuery() {
-    URL url = NetworkUtils.buildUrl(mSearchBoxEditText.getText().toString());
-    mUrlDisplayTextView.setText(url.toString());
+    String githubQuery = mSearchBoxEditText.getText().toString();
+    URL githubSearchUrl = NetworkUtils.buildUrl(githubQuery);
+    mUrlDisplayTextView.setText(githubSearchUrl.toString());
+    new GitHubQueryTask().execute(githubSearchUrl);
+  }
+
+  public class GitHubQueryTask extends AsyncTask<URL, Void, String> {
+    @Override
+    protected String doInBackground(URL... urls) {
+      URL githubSearchUrl = urls[0];
+      String githubSearchResults = null;
+      try {
+        githubSearchResults = NetworkUtils.getResponseFromHttpUrl(githubSearchUrl);
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+      return githubSearchResults;
+    }
+
+    @Override
+    protected void onPostExecute(String s) {
+      if (s != null && !s.equals("")) {
+        mSearchResultsTextView.setText(s);
+      }
+    }
   }
 
   @Override
