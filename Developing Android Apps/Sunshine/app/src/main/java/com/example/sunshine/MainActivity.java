@@ -5,6 +5,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.example.sunshine.data.SunshinePreferences;
 import com.example.sunshine.utilities.NetworkUtils;
@@ -15,6 +17,8 @@ import java.net.URL;
 public class MainActivity extends Activity {
 
   private TextView mWeatherTextView;
+  private TextView mErrorMessageTextView;
+  private ProgressBar mLoadingIndicator;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +26,9 @@ public class MainActivity extends Activity {
     setContentView(R.layout.activity_main);
 
     mWeatherTextView = findViewById(R.id.tv_weather_data);
+    mErrorMessageTextView = findViewById(R.id.display_error_message);
+    mLoadingIndicator = findViewById(R.id.pb_loading_indicator);
+
     loadWeatherData();
   }
 
@@ -50,6 +57,12 @@ public class MainActivity extends Activity {
 
   public class FetchWeatherTask extends AsyncTask<URL, Void, String> {
     @Override
+    protected void onPreExecute() {
+      mLoadingIndicator.setVisibility(View.VISIBLE);
+      super.onPreExecute();
+    }
+
+    @Override
     protected String doInBackground(URL... urls) {
       URL query = urls[0];
       String weatherData = null;
@@ -63,9 +76,24 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onPostExecute(String s) {
+      mLoadingIndicator.setVisibility(View.INVISIBLE);
+
       if (s != null && !s.equals("")) {
         mWeatherTextView.setText(s);
+        showWeatherData();
+      } else {
+        showErrorMessage();
       }
     }
+  }
+
+  private void showWeatherData() {
+    mErrorMessageTextView.setVisibility(View.INVISIBLE);
+    mWeatherTextView.setVisibility(View.VISIBLE);
+  }
+
+  private void showErrorMessage() {
+    mErrorMessageTextView.setVisibility(View.VISIBLE);
+    mWeatherTextView.setVisibility(View.INVISIBLE);
   }
 }
