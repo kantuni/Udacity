@@ -24,7 +24,7 @@ public class MainActivity extends Activity {
   }
 
   private void loadWeatherData() {
-    String location = SunshinePreferences.getPreferredWeatherLocation(getApplicationContext());
+    String location = SunshinePreferences.getPreferredWeatherLocation(this);
     URL weatherDataUrl = NetworkUtils.buildUrl(location);
     new FetchWeatherTask().execute(weatherDataUrl);
   }
