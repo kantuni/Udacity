@@ -5,7 +5,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.example.githubquery.utilities.NetworkUtils;
 
@@ -17,6 +19,9 @@ public class MainActivity extends Activity {
   private EditText mSearchBoxEditText;
   private TextView mUrlDisplayTextView;
   private TextView mSearchResultsTextView;
+  private TextView mErrorMessageTextView;
+  private ProgressBar mLoadingIndicator;
+
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +31,8 @@ public class MainActivity extends Activity {
     mSearchBoxEditText = findViewById(R.id.et_search_box);
     mUrlDisplayTextView = findViewById(R.id.tv_url_display);
     mSearchResultsTextView = findViewById(R.id.tv_github_search_results_json);
+    mErrorMessageTextView = findViewById(R.id.tv_error_message_display);
+    mLoadingIndicator = findViewById(R.id.pb_loading_indicator);
   }
 
   private void makeGitHubSearchQuery() {
@@ -35,7 +42,23 @@ public class MainActivity extends Activity {
     new GitHubQueryTask().execute(githubSearchUrl);
   }
 
+  private void showJSONDataView() {
+    mErrorMessageTextView.setVisibility(View.INVISIBLE);
+    mSearchResultsTextView.setVisibility(View.VISIBLE);
+  }
+
+  private void showErrorMessage() {
+    mSearchResultsTextView.setVisibility(View.INVISIBLE);
+    mErrorMessageTextView.setVisibility(View.VISIBLE);
+  }
+
   public class GitHubQueryTask extends AsyncTask<URL, Void, String> {
+    @Override
+    protected void onPreExecute() {
+      super.onPreExecute();
+      mLoadingIndicator.setVisibility(View.VISIBLE);
+    }
+
     @Override
     protected String doInBackground(URL... urls) {
       URL githubSearchUrl = urls[0];
@@ -50,8 +73,13 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onPostExecute(String s) {
+      mLoadingIndicator.setVisibility(View.INVISIBLE);
+
       if (s != null && !s.equals("")) {
+        showJSONDataView();
         mSearchResultsTextView.setText(s);
+      } else {
+        showErrorMessage();
       }
     }
   }
