@@ -11,7 +11,7 @@ public class GreenAdapter extends RecyclerView.Adapter<GreenAdapter.NumberViewHo
 
   private int mNumberItems;
 
-  public GreenAdapter(int numberItems) {
+  GreenAdapter(int numberItems) {
     mNumberItems = numberItems;
   }
 
@@ -32,10 +32,10 @@ public class GreenAdapter extends RecyclerView.Adapter<GreenAdapter.NumberViewHo
     return mNumberItems;
   }
 
-  public class NumberViewHolder extends RecyclerView.ViewHolder {
+  class NumberViewHolder extends RecyclerView.ViewHolder {
     TextView mListItemNumberView;
 
-    public NumberViewHolder(View itemView) {
+    NumberViewHolder(View itemView) {
       super(itemView);
       mListItemNumberView = itemView.findViewById(R.id.tv_item_number);
     }
