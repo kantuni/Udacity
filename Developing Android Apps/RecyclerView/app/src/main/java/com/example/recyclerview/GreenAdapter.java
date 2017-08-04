@@ -9,10 +9,16 @@ import android.widget.TextView;
 
 public class GreenAdapter extends RecyclerView.Adapter<GreenAdapter.NumberViewHolder> {
 
-  private int mNumberItems;
+  private int mNumberOfItems;
+  private ListItemClickListener mOnClickListener;
 
-  GreenAdapter(int numberItems) {
-    mNumberItems = numberItems;
+  public interface ListItemClickListener {
+    void onListItemClick(int itemIndex);
+  }
+
+  GreenAdapter(int numberOfItems, ListItemClickListener listener) {
+    mNumberOfItems = numberOfItems;
+    mOnClickListener = listener;
   }
 
   @Override
@@ -29,19 +35,25 @@ public class GreenAdapter extends RecyclerView.Adapter<GreenAdapter.NumberViewHo
 
   @Override
   public int getItemCount() {
-    return mNumberItems;
+    return mNumberOfItems;
   }
 
-  class NumberViewHolder extends RecyclerView.ViewHolder {
+  class NumberViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     TextView mListItemNumberView;
 
     NumberViewHolder(View itemView) {
       super(itemView);
       mListItemNumberView = itemView.findViewById(R.id.tv_item_number);
+      itemView.setOnClickListener(this);
     }
 
     void bind(int listIndex) {
       mListItemNumberView.setText(String.valueOf(listIndex));
+    }
+
+    @Override
+    public void onClick(View view) {
+      mOnClickListener.onListItemClick(getAdapterPosition());
     }
   }
 }
