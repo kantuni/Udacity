@@ -51,7 +51,7 @@ public class MainActivity extends Activity {
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     if (item.getItemId() == R.id.action_refresh) {
-      mForecastAdapter = null;
+      mForecastAdapter.setWeatherData(null);
       loadWeatherData();
       return true;
     }
