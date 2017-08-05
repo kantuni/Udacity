@@ -67,8 +67,7 @@ public class MainActivity extends Activity {
 
   private void openWebsite(String url) {
     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-    PackageManager packageManager = MainActivity.this.getPackageManager();
-    if (intent.resolveActivity(packageManager) != null) {
+    if (intent.resolveActivity(getPackageManager()) != null) {
       startActivity(intent);
     }
   }
