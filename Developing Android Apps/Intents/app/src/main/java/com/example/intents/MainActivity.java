@@ -16,6 +16,7 @@ public class MainActivity extends Activity {
 
     Button goBtn = findViewById(R.id.btn_go);
     goBtn.setOnClickListener(new View.OnClickListener() {
+
       @Override
       public void onClick(View view) {
         Context context = MainActivity.this;
