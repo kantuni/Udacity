@@ -10,13 +10,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.example.sunshine.data.SunshinePreferences;
 import com.example.sunshine.utilities.NetworkUtils;
 import com.example.sunshine.utilities.OpenWeatherJsonUtils;
 
 import java.net.URL;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements ForecastAdapter.ForecastAdapterOnClickHandler {
 
   private RecyclerView mRecyclerView;
   private ForecastAdapter mForecastAdapter;
@@ -33,7 +34,7 @@ public class MainActivity extends Activity {
     mRecyclerView.setLayoutManager(layoutManager);
     mRecyclerView.setHasFixedSize(true);
 
-    mForecastAdapter = new ForecastAdapter();
+    mForecastAdapter = new ForecastAdapter(this);
     mRecyclerView.setAdapter(mForecastAdapter);
 
     mErrorMessageTextView = findViewById(R.id.display_error_message);
@@ -64,6 +65,11 @@ public class MainActivity extends Activity {
 
     String location = SunshinePreferences.getPreferredWeatherLocation(this);
     new FetchWeatherTask().execute(location);
+  }
+
+  @Override
+  public void onClickHandler(String s) {
+    Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
   }
 
   private void showWeatherData() {
