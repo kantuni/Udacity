@@ -2,7 +2,6 @@ package com.example.intents;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -36,7 +35,14 @@ public class MainActivity extends Activity {
    */
 
   public void onClickOpenAddressButton(View v) {
-    Toast.makeText(this, "TODO: Open a map when this button is clicked", Toast.LENGTH_SHORT).show();
+    String address = "1600 Amphitheatre Parkway, CA";
+    Uri.Builder builder = new Uri.Builder();
+    builder
+        .scheme("geo")
+        .path("0,0")
+        .query(address);
+    Uri addressUri = builder.build();
+    showMap(addressUri);
   }
 
   /**
@@ -67,6 +73,15 @@ public class MainActivity extends Activity {
 
   private void openWebsite(String url) {
     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+    if (intent.resolveActivity(getPackageManager()) != null) {
+      startActivity(intent);
+    }
+  }
+
+  private void showMap(Uri location) {
+    Intent intent = new Intent(Intent.ACTION_VIEW);
+    intent.setData(location);
+
     if (intent.resolveActivity(getPackageManager()) != null) {
       startActivity(intent);
     }
