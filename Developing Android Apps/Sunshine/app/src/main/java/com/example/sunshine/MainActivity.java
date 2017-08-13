@@ -68,8 +68,9 @@ public class MainActivity extends Activity implements ForecastAdapter.ForecastAd
   }
 
   @Override
-  public void onClickHandler(String s) {
+  public void onClickHandler(String data) {
     Intent openDetailActivityIntent = new Intent(this, DetailActivity.class);
+    openDetailActivityIntent.putExtra(Intent.EXTRA_TEXT, data);
     startActivity(openDetailActivityIntent);
   }
 
