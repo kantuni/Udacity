@@ -53,7 +53,8 @@ public class MainActivity extends Activity {
    */
 
   public void onClickShareTextButton(View v) {
-    Toast.makeText(this, "TODO: Share text when this is clicked", Toast.LENGTH_LONG).show();
+    String textThatYouWantToShare = "Hello";
+    shareText(textThatYouWantToShare);
   }
 
   /**
@@ -81,6 +82,20 @@ public class MainActivity extends Activity {
   private void showMap(Uri location) {
     Intent intent = new Intent(Intent.ACTION_VIEW);
     intent.setData(location);
+
+    if (intent.resolveActivity(getPackageManager()) != null) {
+      startActivity(intent);
+    }
+  }
+
+  private void shareText(String text) {
+    String mimeType = "text/plain";
+    String title = "Awesome title";
+    Intent intent = new Intent(Intent.ACTION_SEND);
+    intent
+        .setType(mimeType)
+        .putExtra(Intent.EXTRA_TITLE, title)
+        .putExtra(Intent.EXTRA_TEXT, text);
 
     if (intent.resolveActivity(getPackageManager()) != null) {
       startActivity(intent);
