@@ -1,6 +1,7 @@
 package com.example.sunshine;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,7 +11,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.example.sunshine.data.SunshinePreferences;
 import com.example.sunshine.utilities.NetworkUtils;
 import com.example.sunshine.utilities.OpenWeatherJsonUtils;
@@ -27,7 +27,7 @@ public class MainActivity extends Activity implements ForecastAdapter.ForecastAd
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_main);
+    setContentView(R.layout.activity_forecast);
 
     mRecyclerView = findViewById(R.id.rv_forecast);
     LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -69,7 +69,8 @@ public class MainActivity extends Activity implements ForecastAdapter.ForecastAd
 
   @Override
   public void onClickHandler(String s) {
-    Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
+    Intent openDetailActivityIntent = new Intent(this, DetailActivity.class);
+    startActivity(openDetailActivityIntent);
   }
 
   private void showWeatherData() {
