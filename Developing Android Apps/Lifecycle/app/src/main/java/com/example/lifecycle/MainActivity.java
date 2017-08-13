@@ -13,6 +13,7 @@ public class MainActivity extends Activity {
    * getSimpleName as that will greatly help to identify the location from which your logs are
    * being posted.
    */
+  
   private static final String TAG = MainActivity.class.getSimpleName();
 
   // Constant values for the names of each respective lifecycle callback
@@ -30,6 +31,7 @@ public class MainActivity extends Activity {
    * Activity. This TextView can be reset to its default state by clicking the Button labeled
    * "Reset Log"
    */
+
   private TextView mLifecycleDisplay;
 
   /**
@@ -40,6 +42,7 @@ public class MainActivity extends Activity {
    *
    * @param savedInstanceState The Activity's previously frozen state, if there was one.
    */
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -68,6 +71,7 @@ public class MainActivity extends Activity {
    *
    * @param lifecycleEvent The name of the event to be logged.
    */
+
   private void logAndAppend(String lifecycleEvent) {
     Log.d(TAG, "Lifecycle Event: " + lifecycleEvent);
     mLifecycleDisplay.append(lifecycleEvent + "\n");
@@ -78,6 +82,7 @@ public class MainActivity extends Activity {
    *
    * @param view The View that was clicked. In this case, it is the Button from our layout.
    */
+
   public void resetLifecycleDisplay(View view) {
     mLifecycleDisplay.setText("Lifecycle callbacks:\n");
   }
