@@ -90,11 +90,9 @@ public class MainActivity extends Activity {
 
   private void shareText(String text) {
     String mimeType = "text/plain";
-    String title = "Awesome title";
     Intent intent = new Intent(Intent.ACTION_SEND);
     intent
         .setType(mimeType)
-        .putExtra(Intent.EXTRA_TITLE, title)
         .putExtra(Intent.EXTRA_TEXT, text);
 
     if (intent.resolveActivity(getPackageManager()) != null) {
