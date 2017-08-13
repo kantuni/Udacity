@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 public class MainActivity extends Activity {
 
   /*
@@ -34,6 +36,7 @@ public class MainActivity extends Activity {
    */
 
   private TextView mLifecycleDisplay;
+  private static ArrayList<String> mLifecycleCallbacks = new ArrayList<>();
 
   /**
    * Called when the activity is first created. This is where you should do all of your normal
@@ -56,6 +59,11 @@ public class MainActivity extends Activity {
         mLifecycleDisplay.setText(savedInstanceState.getString(LIFECYCLE_CALLBACKS_TEXT_KEY));
       }
     }
+
+    for (int i = mLifecycleCallbacks.size() - 1; i >= 0; --i) {
+      mLifecycleDisplay.append(mLifecycleCallbacks.get(i) + "\n");
+    }
+    mLifecycleCallbacks.clear();
 
     logAndAppend(ON_CREATE);
   }
@@ -81,6 +89,7 @@ public class MainActivity extends Activity {
   @Override
   protected void onStop() {
     super.onStop();
+    mLifecycleCallbacks.add(0, ON_STOP);
     logAndAppend(ON_STOP);
   }
 
@@ -93,6 +102,7 @@ public class MainActivity extends Activity {
   @Override
   protected void onDestroy() {
     super.onDestroy();
+    mLifecycleCallbacks.add(0, ON_DESTROY);
     logAndAppend(ON_DESTROY);
   }
 
