@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 public class DetailActivity extends Activity {
 
-  TextView mWeatherDetail;
+  private TextView mWeatherDetail;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -18,9 +18,13 @@ public class DetailActivity extends Activity {
     setContentView(R.layout.activity_detail);
 
     Intent intentFromMainActivity = getIntent();
-    String data = intentFromMainActivity.getStringExtra(Intent.EXTRA_TEXT);
-    mWeatherDetail = findViewById(R.id.tv_weather_detail);
-    mWeatherDetail.setText(data);
+    if (intentFromMainActivity != null) {
+      if (intentFromMainActivity.hasExtra(Intent.EXTRA_TEXT)) {
+        String data = intentFromMainActivity.getStringExtra(Intent.EXTRA_TEXT);
+        mWeatherDetail = findViewById(R.id.tv_weather_detail);
+        mWeatherDetail.setText(data);
+      }
+    }
   }
 
   @Override
