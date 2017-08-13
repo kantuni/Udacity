@@ -15,6 +15,7 @@ public class MainActivity extends Activity {
    */
 
   private static final String TAG = MainActivity.class.getSimpleName();
+  private static final String LIFECYCLE_CALLBACKS_TEXT_KEY = "callbacks";
 
   // Constant values for the names of each respective lifecycle callback
   private static final String ON_CREATE = "onCreate";
@@ -49,6 +50,13 @@ public class MainActivity extends Activity {
     setContentView(R.layout.activity_main);
 
     mLifecycleDisplay = findViewById(R.id.tv_lifecycle_events_display);
+
+    if (savedInstanceState != null) {
+      if (savedInstanceState.containsKey(LIFECYCLE_CALLBACKS_TEXT_KEY)) {
+        mLifecycleDisplay.setText(savedInstanceState.getString(LIFECYCLE_CALLBACKS_TEXT_KEY));
+      }
+    }
+
     logAndAppend(ON_CREATE);
   }
 
@@ -86,6 +94,13 @@ public class MainActivity extends Activity {
   protected void onDestroy() {
     super.onDestroy();
     logAndAppend(ON_DESTROY);
+  }
+
+  @Override
+  protected void onSaveInstanceState(Bundle outState) {
+    super.onSaveInstanceState(outState);
+    logAndAppend(ON_SAVE_INSTANCE_STATE);
+    outState.putString(LIFECYCLE_CALLBACKS_TEXT_KEY, mLifecycleDisplay.getText().toString());
   }
 
   /**
