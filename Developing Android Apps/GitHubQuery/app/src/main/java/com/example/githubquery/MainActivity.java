@@ -16,12 +16,14 @@ import java.net.URL;
 
 public class MainActivity extends Activity {
 
+  private static final String QUERY_URL_KEY = "QUERY_URL";
+  private static final String RAW_JSON_KEY = "RAW_JSON";
+
   private EditText mSearchBoxEditText;
   private TextView mUrlDisplayTextView;
   private TextView mSearchResultsTextView;
   private TextView mErrorMessageTextView;
   private ProgressBar mLoadingIndicator;
-
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +35,11 @@ public class MainActivity extends Activity {
     mSearchResultsTextView = findViewById(R.id.tv_github_search_results_json);
     mErrorMessageTextView = findViewById(R.id.tv_error_message_display);
     mLoadingIndicator = findViewById(R.id.pb_loading_indicator);
+
+    if (savedInstanceState != null) {
+      mSearchBoxEditText.setText(savedInstanceState.getString(QUERY_URL_KEY));
+      mSearchResultsTextView.setText(savedInstanceState.getString(RAW_JSON_KEY));
+    }
   }
 
   private void makeGitHubSearchQuery() {
@@ -98,7 +105,17 @@ public class MainActivity extends Activity {
       makeGitHubSearchQuery();
       return true;
     }
-
     return super.onOptionsItemSelected(item);
+  }
+
+  @Override
+  protected void onSaveInstanceState(Bundle outState) {
+    super.onSaveInstanceState(outState);
+
+    String query = mSearchBoxEditText.getText().toString();
+    outState.putString(QUERY_URL_KEY, query);
+
+    String results = mSearchResultsTextView.getText().toString();
+    outState.putString(RAW_JSON_KEY, results);
   }
 }
