@@ -1,8 +1,12 @@
 package com.example.githubquery;
 
 import android.app.Activity;
+import android.app.LoaderManager;
+import android.content.AsyncTaskLoader;
+import android.content.Loader;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,10 +18,11 @@ import com.example.githubquery.utilities.NetworkUtils;
 import java.io.IOException;
 import java.net.URL;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements LoaderManager.LoaderCallbacks<String> {
 
   private static final String QUERY_URL_KEY = "QUERY_URL";
   private static final String RAW_JSON_KEY = "RAW_JSON";
+  private final int GITHUB_SEARCH_LOADER = 1;
 
   private EditText mSearchBoxEditText;
   private TextView mUrlDisplayTextView;
@@ -57,6 +62,53 @@ public class MainActivity extends Activity {
   private void showErrorMessage() {
     mSearchResultsTextView.setVisibility(View.INVISIBLE);
     mErrorMessageTextView.setVisibility(View.VISIBLE);
+  }
+
+  @Override
+  public Loader<String> onCreateLoader(int i, final Bundle bundle) {
+    return new AsyncTaskLoader<String>(this) {
+      @Override
+      protected void onStartLoading() {
+        super.onStartLoading();
+        if (bundle == null) {
+          return;
+        }
+
+        mLoadingIndicator.setVisibility(View.VISIBLE);
+        forceLoad();
+      }
+
+      @Override
+      public String loadInBackground() {
+        String githubSearchUrl = bundle.getString(GITHUB_SEARCH_LOADER);
+
+        if (githubSearchUrl == null || TextUtils.isEmpty(githubSearchUrl)) {
+          return null;
+        }
+
+        try {
+          String githubSearchResults = NetworkUtils.getResponseFromHttpUrl(githubSearchUrl);
+        } catch (IOException e) {
+          e.printStackTrace();
+          return null;
+        }
+      }
+    };
+  }
+
+  @Override
+  public void onLoadFinished(Loader<String> loader, String s) {
+    mLoadingIndicator.setVisibility(View.INVISIBLE);
+    if (s != null && !s.equals("")) {
+      showJSONDataView();
+      mSearchResultsTextView.setText(s);
+    } else {
+      showErrorMessage();
+    }
+  }
+
+  @Override
+  public void onLoaderReset(Loader<String> loader) {
   }
 
   public class GitHubQueryTask extends AsyncTask<URL, Void, String> {
